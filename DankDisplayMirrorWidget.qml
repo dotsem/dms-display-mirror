@@ -261,7 +261,7 @@ PluginComponent {
 
     Process {
         id: monitorProcess
-        command: ["sh", "-c", "niri msg outputs | grep '^Output' | cut -d'(' -f 2 | cut -d')' -f 1"]
+        command: ["sh", "-c", "niri msg outputs | grep '^Output' | awk -F'[()]' '{print $(NF-1)}'"]
         running: false
 
         property var monitorList: []
@@ -301,7 +301,7 @@ PluginComponent {
 
     Process {
         id: focusedOutputProcess
-        command: ["sh", "-c", "niri msg focused-output 2>/dev/null | grep -oP '(?<=\\().*(?=\\))' | head -1"]
+        command: ["sh", "-c", "niri msg focused-output 2>/dev/null | grep '^Output' | awk -F'[()]' '{print $(NF-1)}' | head -1"]
         running: false
 
         stdout: SplitParser {
